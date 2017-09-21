@@ -10,6 +10,7 @@ import java.util.List;
 
 import weka.classifiers.trees.J48;
 import weka.core.Attribute;
+import weka.core.DenseInstance;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -29,70 +30,79 @@ public class Classifier {
     public Classifier() throws Exception {
 //        ConverterUtils.DataSource source = new ConverterUtils.DataSource("C:\\Users\\Louis\\Documents\\Module Smart Spaces\\DataSet\\Participant_1.csv");
 //        data = source.getDataSet();
-        tree = (J48) SerializationHelper.read(new FileInputStream("J48Classifier.model"));
+        tree = (J48) SerializationHelper.read(new FileInputStream("C:\\Users\\Louis\\AndroidStudioProjects\\Challenge3\\app\\src\\main\\java\\J48Classifier.model"));
 //        tree.buildClassifier(data);
     }
 
     public Instances listToInstance(List<Data> readings) {
-        FastVector atts = new FastVector();
-        FastVector fvClassVal = new FastVector();
-        fvClassVal.addElement("walking");
-        fvClassVal.addElement("standing");
-        fvClassVal.addElement("jogging");
-        fvClassVal.addElement("sitting");
-        fvClassVal.addElement("biking");
-        fvClassVal.addElement("upstairs");
-        fvClassVal.addElement("downstairs");
-        Attribute Class = new Attribute("Activity", fvClassVal);
+        List<Attribute> atts = new ArrayList<>();
+        List<String> classVal = new ArrayList<>();
 
-        atts.addElement(new Attribute("Ax"));
-        atts.addElement(new Attribute("Ay"));
-        atts.addElement(new Attribute("Az"));
-        atts.addElement(new Attribute("Lx"));
-        atts.addElement(new Attribute("Ly"));
-        atts.addElement(new Attribute("Lz"));
-        atts.addElement(new Attribute("Gx"));
-        atts.addElement(new Attribute("Gy"));
-        atts.addElement(new Attribute("Gz"));
-        atts.addElement(new Attribute("Mx"));
-        atts.addElement(new Attribute("My"));
-        atts.addElement(new Attribute("Mz"));
-        atts.addElement(Class);
+        Attribute Ax = new Attribute("Ax");
+        Attribute Ay = new Attribute("Ay");
+        Attribute Az = new Attribute("Az");
+        Attribute Lx = new Attribute("Lx");
+        Attribute Ly = new Attribute("Ly");
+        Attribute Lz = new Attribute("Lz");
+        Attribute Gx = new Attribute("Gx");
+        Attribute Gy = new Attribute("Gy");
+        Attribute Gz = new Attribute("Gz");
+        Attribute Mx = new Attribute("Mx");
+        Attribute My = new Attribute("My");
+        Attribute Mz = new Attribute("Mz");
 
-        Instances dataSet = new Instances("Data", atts, 0);
+        atts.add(Ax);
+        atts.add(Ay);
+        atts.add(Az);
+        atts.add(Lx);
+        atts.add(Ly);
+        atts.add(Lz);
+        atts.add(Gx);
+        atts.add(Gy);
+        atts.add(Gz);
+        atts.add(Mx);
+        atts.add(My);
+        atts.add(Mz);
+        atts.add(new Attribute("@@class@@", classVal));
 
+        classVal.add("walking");
+        classVal.add("standing");
+        classVal.add("jogging");
+        classVal.add("sitting");
+        classVal.add("biking");
+        classVal.add("upstairs");
+        classVal.add("downstairs");
 
+//        Attribute Class = new Attribute("Activity", classVal);
+
+        Instances dataSet = new Instances("TestInstances", (ArrayList<Attribute>) atts, 0);
+        dataSet.setClassIndex(dataSet.numAttributes() - 1);
 
         for (Data d : readings) {
-            double[] attValues = new double[dataSet.numAttributes()];
-            attValues[0] = d.getA().getX();
-            attValues[1] = d.getA().getY();
-            attValues[2] = d.getA().getZ();
-            attValues[3] = d.getL().getX();
-            attValues[4] = d.getL().getY();
-            attValues[5] = d.getL().getZ();
-            attValues[6] = d.getG().getX();
-            attValues[7] = d.getG().getY();
-            attValues[8] = d.getG().getZ();
-            attValues[9] = d.getM().getX();
-            attValues[10] = d.getM().getY();
-            attValues[11] = d.getM().getZ();
-
-            Instance instance = new Instance(1.0, attValues);
-            dataSet.add(instance);
-            dataSet.setClassIndex(dataSet.numAttributes() - 1);
+            Instance instCo = new DenseInstance(dataSet.numAttributes());
+            dataSet.add(instCo);
+            instCo.setValue(Ax, d.getA().getX());
+            instCo.setValue(Ay, d.getA().getY());
+            instCo.setValue(Az, d.getA().getZ());
+            instCo.setValue(Lx, d.getL().getX());
+            instCo.setValue(Ly, d.getL().getY());
+            instCo.setValue(Lz, d.getL().getZ());
+            instCo.setValue(Gx, d.getG().getX());
+            instCo.setValue(Gy, d.getG().getY());
+            instCo.setValue(Gz, d.getG().getZ());
+            instCo.setValue(Mx, d.getM().getX());
+            instCo.setValue(My, d.getM().getY());
+            instCo.setValue(Mz, d.getM().getZ());
 
         }
-
-
-
 
         return dataSet;
 
     }
 
-    public String classifyInstance(Instance instance) throws Exception {
+    public String classify(Instance instance) throws Exception {
         tree.classifyInstance(instance);
+        return null;
     }
 
 
