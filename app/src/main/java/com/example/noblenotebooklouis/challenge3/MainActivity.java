@@ -28,11 +28,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private boolean running;
     private Button button;
     private TextView status;
+    private Classifier classifier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        try {
+            classifier = new Classifier();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         running = false;
         initView();
         initButton();
