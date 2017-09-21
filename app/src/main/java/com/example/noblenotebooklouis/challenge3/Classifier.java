@@ -34,6 +34,12 @@ public class Classifier {
 //        tree.buildClassifier(data);
     }
 
+    /**
+     * turns the read data into Instances
+     * @param readings
+     * @return
+     */
+
     public Instances listToInstance(List<Data> readings) {
         List<Attribute> atts = new ArrayList<>();
         List<String> classVal = new ArrayList<>();
@@ -100,6 +106,13 @@ public class Classifier {
 
     }
 
+    /**
+     * Classifies in an instance. Prefer to have multiple instances.
+     *
+     * @param instance
+     * @return the class attribute, e.g. walking, jogging etc.
+     * @throws Exception
+     */
     public String classify(Instance instance) throws Exception {
         double result = tree.classifyInstance(instance);
         return data.classAttribute().value((int) result);
