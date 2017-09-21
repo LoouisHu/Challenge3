@@ -101,8 +101,8 @@ public class Classifier {
     }
 
     public String classify(Instance instance) throws Exception {
-        tree.classifyInstance(instance);
-        return null;
+        double result = tree.classifyInstance(instance);
+        return data.classAttribute().value((int) result);
     }
 
 
