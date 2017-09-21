@@ -31,6 +31,7 @@ public class Classifier {
 //        ConverterUtils.DataSource source = new ConverterUtils.DataSource("C:\\Users\\Louis\\Documents\\Module Smart Spaces\\DataSet\\Participant_1.csv");
 //        data = source.getDataSet();
         tree = (J48) SerializationHelper.read(new FileInputStream("C:\\Users\\Louis\\AndroidStudioProjects\\Challenge3\\app\\src\\main\\java\\J48Classifier.model"));
+        tree.setOptions(/**hier de opties toevoegen die mogelijk zijn*/);
 //        tree.buildClassifier(data);
     }
 
@@ -101,8 +102,8 @@ public class Classifier {
     }
 
     public String classify(Instance instance) throws Exception {
-        tree.classifyInstance(instance);
-        return null;
+        instance.setClassValue(tree.classifyInstance(instance));
+        return instance.toString();
     }
 
 
